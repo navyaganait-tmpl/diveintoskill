@@ -10,4 +10,6 @@ router.get('/limited-blogs', blogController.getLimitedBlogs);
 
 router.get('/blogs/:id', blogController.getBlogById);
 
+router.get('/blogs/related/:id', blogController.getRelatedBlogs);
+
 module.exports = router;

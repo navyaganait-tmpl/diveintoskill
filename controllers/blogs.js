@@ -48,6 +48,38 @@ module.exports = {
       return res.status(500).json({ error: 'Internal Server Error' });
     }
   },
+
+  getRelatedBlogs : async (req, res) => {
+    try {
+      const blogId = req.params.id;
+      const blog = await db.blogs.findByPk(blogId);
+  
+      if (!blog) {
+        return res.status(404).json({ error: 'Blog not found' });
+      }
+      console.log("test");
+      // Find 4 related blogs with similar category using ilike
+      const relatedBlogs = await db.blogs.findAll({
+        where: {
+          category: {
+            [Op.iLike]: `%${blog.category}%`, 
+          },
+          // id: {
+          //   [Op.not]: id, // Exclude the current blog
+          // },
+        },
+        limit: 4,
+      });
+
+      console.log('Related Blogs:', relatedBlogs);
+  
+      return res.status(200).json(relatedBlogs);
+    } catch (error) {
+      console.error('Error fetching related blogs:', error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+  },
+  
 };
 
 // module.exports =blogController;
