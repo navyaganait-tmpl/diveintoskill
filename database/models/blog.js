@@ -20,14 +20,7 @@ module.exports=(sequelize,DataTypes)=>{
             type:DataTypes.STRING,
             allowNull:false,
         },
-        authorid:{
-            type:DataTypes.INTEGER,
-            allowNull:false,
-        },
-        categoryid:{
-            type:DataTypes.INTEGER,
-            allowNull:false,
-        }
+        
 
     })
     // blogs.associate= function(models){
