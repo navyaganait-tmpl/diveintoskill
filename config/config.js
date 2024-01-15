@@ -1,7 +1,7 @@
 require("dotenv/config")
  
 const {
-  DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD} = process.env;
+  DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD, DB_URI} = process.env;
  
 const development = {
   dialect: "postgres",
@@ -12,6 +12,7 @@ const development = {
   host: DB_HOST,
   port: Number(DB_PORT),
   ssl: true,
+  db_uri:DB_URI,
   // logging: LOGGING,
   // db_uri: DB_URI
 };

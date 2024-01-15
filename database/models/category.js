@@ -1,4 +1,5 @@
 const {DataTypes, BelongsTo}= require("sequelize");
+const author=require('./author');
 module.exports=(sequelize,DataTypes)=>{
     const category =sequelize.define("category",{
         id:{

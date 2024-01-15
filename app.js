@@ -7,7 +7,7 @@ const configs = require("./config/routes");
 const blogs = require('./routes/blogs');
 app.use('/api', blogs);
 
-const db = require("./database/models");
+const db = require('./database/models');
 PORT=process.env.PORT || 8080
 app.use(express.json())
 

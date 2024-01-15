@@ -1,5 +1,5 @@
 // const Blog = require('../models/blog');
-const db = require('../database/models');
+const db =require('../database/models');
 module.exports = {
   getAllBlogs: async (req, res) => {
     try {
