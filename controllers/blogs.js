@@ -1,4 +1,5 @@
 // const Blog = require('../models/blog');
+const { Sequelize, Op } = require('sequelize');
 const db =require('../database/models');
 module.exports = {
   getAllBlogs: async (req, res) => {
