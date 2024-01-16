@@ -9,23 +9,24 @@ module.exports=(sequelize,DataTypes)=>{
             auto_increment:true
         },
         title:{
-            type:DataTypes.STRING,
+            type:DataTypes.TEXT,
             allowNull: false,
         },
         description:{
-            type:DataTypes.STRING,
+            type:DataTypes.TEXT,
             allowNull: false,
         },
         link:{
-            type:DataTypes.STRING,
+            type:DataTypes.TEXT,
             allowNull:false,
         },
+        
         
 
     })
     // blogs.associate= function(models){
         blogs.associate = function (models) {
-            models.blogs.belongsTo(models.author, { foreignKey: "id" });
+            models.blogs.belongsTo(models.author, { foreignKey: "authorId" });
           };
         // blogs.belongsTo(models.author,{
         //     targetkey:'authorId',
@@ -34,7 +35,7 @@ module.exports=(sequelize,DataTypes)=>{
         // });
     // }
     blogs.associate = function (models) {
-        models.blogs.hasMany(models.category, { foreignKey: "id" });
+        models.blogs.belongsTo(models.category, { foreignKey:  'categoryId',as: 'blogCategory', });
       };
     return blogs;
 }

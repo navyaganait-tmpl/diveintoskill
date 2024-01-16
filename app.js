@@ -4,8 +4,21 @@ require("dotenv").config();
 const app = express();
 const configs = require("./config/routes");
 // const nodeMailer=require('nodemailer');
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 const blogs = require('./routes/blogs');
 app.use('/api', blogs);
+
+const category=require('./routes/categories');
+app.use(category);
+
+const contact=require('./routes/contact');
+app.use(contact);
+
+const subscribe = require('./routes/subscribe');
+app.use(subscribe);
 
 const db = require('./database/models');
 PORT=process.env.PORT || 8080

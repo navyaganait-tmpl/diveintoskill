@@ -1,7 +1,7 @@
 const {DataTypes, BelongsTo}= require("sequelize");
 module.exports=(sequelize,DataTypes)=>{
     const author =sequelize.define("author",{
-        id:{
+        authorId:{
             primaryKey:true,
             type:DataTypes.INTEGER,
             auto_increment:true
@@ -11,12 +11,12 @@ module.exports=(sequelize,DataTypes)=>{
             allowNull: false,
         },
         photo:{
-            type:DataTypes.STRING,
+            type:DataTypes.TEXT,
             allowNull: true,
         }
     })
     author.associate = function (models) {
-        models.author.belongsTo(models.blogs, { foreignKey: "id" });
+        models.author.hasMany(models.blogs, { foreignKey: "authorId" });
       };
     return author;
 

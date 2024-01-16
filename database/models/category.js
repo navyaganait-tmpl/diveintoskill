@@ -2,7 +2,7 @@ const {DataTypes, BelongsTo}= require("sequelize");
 const author=require('./author');
 module.exports=(sequelize,DataTypes)=>{
     const category =sequelize.define("category",{
-        id:{
+        categoryId:{
             primaryKey:true,
             type:DataTypes.INTEGER,
             auto_increment:true
@@ -16,8 +16,8 @@ module.exports=(sequelize,DataTypes)=>{
     //     category.hasMany(models.blog,{
     //         as :'categoryId'
     //     });}
-    author.associate = function (models) {
-        models.author.belongsTo(models.blogs, { foreignKey: "id" });
+    category.associate = function (models) {
+        models.category.hasMany(models.blogs, { foreignKey: "categoryId" ,as: 'blogCategory',});
       };
     return category;
 }

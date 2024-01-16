@@ -1,16 +1,17 @@
 // const Blog = require('../models/blog');
-const { Sequelize, Op } = require('sequelize');
-const db =require('../database/models');
+const Sequelize = require('sequelize');
+const db = require('../database/models');
 module.exports = {
   getAllBlogs: async (req, res) => {
     try {
       // const blogs = await blog.findAll();
       console.log(req.query);
-      const page = parseInt(req.query.pageno) 
-      const pageSize = parseInt(req.query.pagesize) 
+      const page = parseInt(req.query.pageno)
+      const pageSize = parseInt(req.query.pagesize)
       const offset = (page - 1) * pageSize;
       // console.log("test");
-      const blogs = await db.blogs.findAll({offset:offset,limit:pageSize,})
+      const blogs = await db.blogs.findAll({ offset: offset, limit: pageSize })
+      console.log(blogs);
       return res.status(200).json(blogs);
     } catch (error) {
       console.error('Error fetching posts:', error);
@@ -20,12 +21,13 @@ module.exports = {
 
   getLimitedBlogs: async (req, res) => {
     try {
-      
+
       const blogs = await db.blogs.findAll({
         limit: 4,
-        order: [['createdAt', 'DESC']], 
+        order: [['createdAt', 'DESC']],
       });
 
+      console.log(blogs, "HERE");
       return res.status(200).json(blogs);
     } catch (error) {
       console.error('Error fetching blogs:', error);
@@ -50,37 +52,81 @@ module.exports = {
     }
   },
 
-  getRelatedBlogs : async (req, res) => {
+  getRelatedBlogs: async (req, res) => {
     try {
       const blogId = req.params.id;
-      const blog = await db.blogs.findByPk(blogId);
-  
-      if (!blog) {
-        return res.status(404).json({ error: 'Blog not found' });
-      }
-      console.log("test");
-      // Find 4 related blogs with similar category using ilike
-      const relatedBlogs = await db.blogs.findAll({
-        where: {
-          category: {
-            [Op.iLike]: `%${blog.category}%`, 
-          },
+      const blog = await db.blogs.findByPk(blogId, {
+        include: [{
+          model: db.category,
+          as: 'blogCategory',
+          separate: false,
+          // where: {
+          //   attributes:{category: blogCategory},
           // id: {
           //   [Op.not]: id, // Exclude the current blog
           // },
-        },
-        limit: 4,
+          // },
+        }]
+      });
+      // const{dataValues}=blog.blogCategory.category;
+      // console.log("scabhcvhdzv", blog.blogCategory.category);
+
+      if (!blog) {
+        return res.status(404).json({ error: 'Blog not found' });
+      }
+      // const blogCategory = blog.category;
+      // console.log(blog);
+
+      // console.log("test");
+      // Find 4 related blogs with similar category using ilike
+      const relatedBlogs = await db.blogs.findAll({
+
+        // id: {
+        //   [Op.not]: id, // Exclude the current blog
+        // },
+
+        include: [{
+          model: db.category,
+          as: 'blogCategory',
+          separate: false,
+         
+          where: {
+            category: blog.blogCategory.category
+          }
+        }],
+        
+        limit:4,
       });
 
       console.log('Related Blogs:', relatedBlogs);
-  
+
       return res.status(200).json(relatedBlogs);
     } catch (error) {
       console.error('Error fetching related blogs:', error);
       return res.status(500).json({ error: 'Internal Server Error' });
     }
   },
+  getSimilarBlogs: async (req, res) => {
+    try {
+      const searchTerm = req.params.searchTerm;
   
+      // Find blogs where title or content is similar to the search term
+      const similarBlogs = await db.blogs.findAll({
+        where: {
+          [db.Sequelize.Op.or]: [
+            { title: { [db.Sequelize.Op.iLike]: `%${searchTerm}%` } },
+            { description: { [db.Sequelize.Op.iLike]: `%${searchTerm}%` } },
+          ],
+        },
+      });
+  
+      return res.status(200).json(similarBlogs);
+    } catch (error) {
+      console.error('Error fetching similar blogs:', error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+  },
+
 };
 
 // module.exports =blogController;
