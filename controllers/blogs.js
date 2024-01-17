@@ -10,7 +10,18 @@ module.exports = {
       const pageSize = parseInt(req.query.pagesize)
       const offset = (page - 1) * pageSize;
       // console.log("test");
-      const blogs = await db.blogs.findAll({ offset: offset, limit: pageSize })
+      const blogs = await db.blogs.findAll({
+        include: [
+          { model: db.author },
+          {
+            model: db.category,
+            as: 'blogCategory',
+            separate: false,
+            attributes: ['category'],
+          }],
+        offset: offset,
+        limit: pageSize
+      })
       console.log(blogs);
       return res.status(200).json(blogs);
     } catch (error) {
@@ -23,6 +34,12 @@ module.exports = {
     try {
 
       const blogs = await db.blogs.findAll({
+        include: [{ model: db.author },{
+          model: db.category,
+          as: 'blogCategory',
+          separate: false,
+          attributes: ['category'],
+        }],
         limit: 4,
         order: [['createdAt', 'DESC']],
       });
@@ -39,7 +56,14 @@ module.exports = {
     try {
       const blogId = req.params.id;
 
-      const blog = await db.blogs.findByPk(blogId);
+      const blog = await db.blogs.findByPk(blogId, {
+        include: [{ model: db.author },{
+          model: db.category,
+          as: 'blogCategory',
+          separate: false,
+          attributes: ['category'],
+        }],
+      });
 
       if (!blog) {
         return res.status(404).json({ error: 'Blog not found' });
@@ -60,12 +84,7 @@ module.exports = {
           model: db.category,
           as: 'blogCategory',
           separate: false,
-          // where: {
-          //   attributes:{category: blogCategory},
-          // id: {
-          //   [Op.not]: id, // Exclude the current blog
-          // },
-          // },
+
         }]
       });
       // const{dataValues}=blog.blogCategory.category;
@@ -85,20 +104,20 @@ module.exports = {
         //   [Op.not]: id, // Exclude the current blog
         // },
 
-        include: [{
+        include: [{ model: db.author },{
           model: db.category,
           as: 'blogCategory',
           separate: false,
-         
+
           where: {
             category: blog.blogCategory.category
           }
         }],
-        
-        limit:4,
+
+        limit: 4,
       });
 
-      console.log('Related Blogs:', relatedBlogs);
+      // console.log('Related Blogs:', relatedBlogs);
 
       return res.status(200).json(relatedBlogs);
     } catch (error) {
@@ -109,9 +128,15 @@ module.exports = {
   getSimilarBlogs: async (req, res) => {
     try {
       const searchTerm = req.params.searchTerm;
-  
+
       // Find blogs where title or content is similar to the search term
       const similarBlogs = await db.blogs.findAll({
+        include: [{ model: db.author },{
+          model: db.category,
+          as: 'blogCategory',
+          separate: false,
+          attributes: ['category'],
+        }],
         where: {
           [db.Sequelize.Op.or]: [
             { title: { [db.Sequelize.Op.iLike]: `%${searchTerm}%` } },
@@ -119,7 +144,7 @@ module.exports = {
           ],
         },
       });
-  
+
       return res.status(200).json(similarBlogs);
     } catch (error) {
       console.error('Error fetching similar blogs:', error);

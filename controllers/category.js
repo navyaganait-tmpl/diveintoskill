@@ -20,7 +20,7 @@ module.exports={
       
           
           const blogs = await db.blogs.findAll({
-            include: [
+            include: [{ model: db.author },
               {
                 model: db.category,
                 as: 'blogCategory',
