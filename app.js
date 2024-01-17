@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const blogs = require('./routes/blogs');
 app.use('/api', blogs);
 
-const category=require('./routes/categories');
+const category=require('./routes/category');
 app.use(category);
 
 const contact=require('./routes/contact');
