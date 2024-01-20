@@ -29,7 +29,7 @@ app.use(cors({
     origin:'*',// Replace with your frontend's actual URL
  
     methods:'GET,HEAD,PUT,PATCH,POST,DELETE',   
-    credentials:true,
+    credentials:false,
 }))
 app.use((res, req, next)=> {
     res.header("Acess-Control-Allow-Origin", "*");
