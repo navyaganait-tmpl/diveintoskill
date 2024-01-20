@@ -26,7 +26,7 @@ app.use(express.json())
 
 // CORS SETUP
 app.use(cors({
-    origin:'http://localhost',// Replace with your frontend's actual URL
+    origin:'*',// Replace with your frontend's actual URL
  
     methods:'GET,HEAD,PUT,PATCH,POST,DELETE',   
     credentials:true,
