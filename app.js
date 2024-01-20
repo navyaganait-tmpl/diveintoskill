@@ -32,11 +32,11 @@ app.use(cors({
     credentials:false,
 }))
 app.use((res, req, next)=> {
-    res.header("Acess-Control-Allow-Origin", "*");
-    res.header("Acess-Control-Allow-Methods",
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods",
     "GET, HEAD, OPTIONS, POST, PUT, DELETE"
     );
-    res.header("Acess-Control-Allow-Headers",
+    res.header("Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
     );
     next()
