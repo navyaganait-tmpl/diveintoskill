@@ -25,7 +25,9 @@ PORT=process.env.PORT || 8080
 app.use(express.json())
 
 // CORS SETUP
-app.use(cors())
+app.use(cors({
+    origin:"*",
+}))
 app.use((res, req, next)=> {
     res.header("Acess-Control-Allow-Origin", "*");
     res.header("Acess-Control-Allow-Methods",
