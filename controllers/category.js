@@ -7,7 +7,7 @@ module.exports={
           const categories = await db.category.findAll();
       
           const categoryNames = categories.map(category => category);
-      
+          // console.log(categoryNames[0]);
           return res.status(200).json(categoryNames);
         } catch (error) {
           console.error('Error fetching categories:', error);
@@ -30,7 +30,7 @@ module.exports={
               },
             ],
           });
-      
+          console.log(blogs[0]);
           return res.status(200).json(blogs);
         } catch (error) {
           console.error('Error fetching blogs by category:', error);
